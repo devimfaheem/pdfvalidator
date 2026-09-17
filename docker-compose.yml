@@ -1,0 +1,9 @@
+services:
+  pdfvalidator:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      # Sample PDFs in, reports out, without rebuilding the image.
+      - ./CHN Generated Samples:/app/CHN Generated Samples:ro
+      - ./output:/app/output
