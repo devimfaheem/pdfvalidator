@@ -48,12 +48,14 @@ def _render(report: ComplianceReport) -> None:
     show, message = STATUS_STYLE[report.status]
     show(message)
 
-    checked, violated, review, regions, unevaluated = st.columns(5)
+    # Short labels: five columns truncate anything longer, and a truncated metric
+    # label is worse than a terse one.
+    checked, violated, review, regions, unreadable = st.columns(5)
     checked.metric("Rules checked", report.rules_checked)
-    violated.metric("Rules violated", report.rules_violated)
-    review.metric("Needs human review", report.needs_review_count)
-    regions.metric("Flagged regions", len(report.regions))
-    unevaluated.metric("Not evaluable", report.regions_unevaluated)
+    violated.metric("Violations", report.rules_violated)
+    review.metric("Needs review", report.needs_review_count)
+    regions.metric("Regions", len(report.regions))
+    unreadable.metric("Unreadable", report.regions_unevaluated)
 
     violations = [
         f for f in report.findings
