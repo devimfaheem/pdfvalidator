@@ -41,3 +41,9 @@ class ComplianceReport:
     rules_violated: int
     needs_review_count: int
     findings: list[Finding]
+    # Task 1's own output. A reviewer needs to see what the submitter marked, not
+    # just what was wrong with it — and it is what `Finding.region_id` points at.
+    regions: list[Region] = field(default_factory=list)
+    # Flagged regions yielding no text: the submitter marked something the agent
+    # could not read (an image, a scan), so no rule could judge it either way.
+    regions_unevaluated: int = 0

@@ -66,6 +66,13 @@ def test_sample_04_extracts_the_drawn_box_and_ignores_the_reviewer_note():
     # Scanning it as body text would report two CHN-1 violations on page 1.
     assert not [f for f in _confirmed(report, "CHN-1") if f.page == 1]
 
+    # Exactly what the reviewer marked: the drawn box and the highlight, both on
+    # slide 3, as the note itself says. The deck's nav tab bar (five filled
+    # rectangles per page, 21 in all) is page furniture, not flagged content.
+    assert len(report.regions) == 2
+    assert {r.page for r in report.regions} == {3}
+    assert {r.source for r in report.regions} == {"hand_drawn", "native_annotation"}
+
     doc = pymupdf.open(str(SAMPLES_DIR / "CHN-Sample-04-Hand-Drawn-Boxes.pdf"))
     ids = itertools.count()
     regions = [r for i in range(len(doc)) for r in extract_annotations(doc[i], i + 1, ids)]

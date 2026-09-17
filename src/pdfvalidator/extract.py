@@ -17,6 +17,10 @@ REVIEWER_NOTE_SUBTYPES = {"FreeText", "Text"}
 _MERGE_IOU = 0.6
 _DUPLICATE_IOU = 0.9
 
+# A drawn box encloses content. A rule, underline or hairline is a rectangle with
+# no area — Sample-06's header rule is 532pt wide and 0pt tall.
+_MIN_BOX_SIDE = 10
+
 
 # --------------------------------------------------------------------------- #
 # Regions
@@ -40,16 +44,30 @@ def extract_handdrawn_boxes(
 ) -> list[Region]:
     """Fallback for boxes drawn as plain vector paths rather than annotations.
 
-    Skips anything built from curves (decorative blobs bound a rectangle too) and
-    anything that merely repaints an annotation we already captured.
+    Three things are deliberately not regions:
+
+    - Curved paths. A decorative blob reports a rectangular bounding box, so the
+      path's own segments are inspected instead (Sample-04 page 1).
+    - Solid fills with no outline. A reviewer draws an outline around content;
+      a solid block of brand colour is page furniture. Sample-04's navigation tab
+      bar is five filled rectangles repeated on every page — 21 of them, each
+      containing real text, and none of them flagged by anyone.
+    - Anything inside a reviewer's note. The note's own border is a stroked
+      rectangle, and its text is already excluded from the text stream.
+    - Rules and hairlines, which are rectangles with no area.
     """
+    note_rects = [a.rect for a in page.annots() if a.type[1] in REVIEWER_NOTE_SUBTYPES]
     regions: list[Region] = []
     for drawing in page.get_drawings():
         items = drawing.get("items", [])
         rect = drawing.get("rect")
         if not items or rect is None or not _is_rectangular_path(items):
             continue
+        if not _has_outline(drawing) or not _encloses_area(rect):
+            continue
         bbox = (rect.x0, rect.y0, rect.x1, rect.y1)
+        if _sits_inside_note(bbox, note_rects):
+            continue
         color = tuple(drawing["color"]) if drawing.get("color") else None
         if _duplicates_annotation(bbox, color, page_number, existing_regions):
             continue
@@ -148,6 +166,15 @@ def _quad_bbox(annot) -> tuple[float, float, float, float]:
 def _is_rectangular_path(items: list[tuple]) -> bool:
     kinds = {item[0] for item in items}
     return "c" not in kinds and kinds.issubset({"re", "l"})
+
+
+def _has_outline(drawing: dict) -> bool:
+    """PyMuPDF's type is "s" (stroke), "f" (fill) or "fs" (both)."""
+    return drawing.get("type") in ("s", "fs")
+
+
+def _encloses_area(rect) -> bool:
+    return (rect.x1 - rect.x0) >= _MIN_BOX_SIDE and (rect.y1 - rect.y0) >= _MIN_BOX_SIDE
 
 
 def _duplicates_annotation(bbox, color, page_number: int, existing_regions: list[Region]) -> bool:

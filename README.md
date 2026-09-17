@@ -71,6 +71,9 @@ PDF ─┬─ extract.py ── flagged regions  ─┬─ rules.py    ── fi
      └─ logo.py ───── reference hash ───┘                           ┘               report.md
 ```
 
+Requirement-by-requirement traceability — every rule and task mapped to its
+implementation and test — is in [docs/SPEC.md](docs/SPEC.md).
+
 Eight modules, ~900 lines:
 
 | File | Responsibility |
@@ -176,7 +179,7 @@ Verified by reading each PDF directly, not by recording whatever the tool emitte
 | 01 Multi-colour highlights | `FAIL` — citation #1 genuinely omits "Accessed [date]"; QR code surfaced |
 | 02 Tradeshow banner | `FAIL` — short form used above the citation that introduces it |
 | 03 Multi-page deck | `FAIL` — 2nd occurrence drops the ™, caught across a page boundary |
-| 04 Hand-drawn boxes | `FAIL` — Tier A stated with no definition; drawn box extracted, reviewer note ignored |
+| 04 Hand-drawn boxes | `FAIL` — Tier A stated with no definition; exactly 2 regions extracted (the drawn box and the highlight, both on slide 3), reviewer note and nav bar ignored |
 | 05 Logo, no license | `FAIL` — logo flagged for review; disclaimer missing |
 | 06 Logo with license | `FAIL` — logo provisionally compliant; disclaimer still missing |
 

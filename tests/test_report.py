@@ -1,5 +1,7 @@
+from conftest import region
+
 from pdfvalidator.models import ComplianceReport, Finding
-from pdfvalidator.report import build_report, render_markdown
+from pdfvalidator.report import build_report, render_markdown, to_dict
 
 ALL_RULE_IDS = ["NAMING-SEQUENCE", "CAT-DEF", "CITATION", "DISCLAIMER", "LOGO-LICENSE", "QR-LINK"]
 
@@ -72,6 +74,56 @@ def test_markdown_separates_a_compliant_logo_from_violations():
     assert "## Violations" in markdown
     assert "## Checked and Compliant" in markdown
     assert markdown.index("## Violations") < markdown.index("## Checked and Compliant")
+
+
+# --------------------------------------------------------------------------- #
+# Task 1 output and unevaluable regions
+# --------------------------------------------------------------------------- #
+
+def test_extracted_regions_are_carried_into_the_report():
+    """Task 6 summarizes Tasks 1-4, so the regions Task 1 found belong in it —
+    they are also what a finding's region_id points at."""
+    regions = [region("r1", text="CHN Clinical Standards"), region("r2", page=2, text="more content")]
+    report = build_report("doc.pdf", ALL_RULE_IDS, [], regions)
+
+    assert len(report.regions) == 2
+    assert [r["id"] for r in to_dict(report)["regions"]] == ["r1", "r2"]
+
+
+def test_region_without_text_counts_as_not_evaluable():
+    """The submitter marked something unreadable, so no rule could judge it. That
+    is not a pass — it goes to a human."""
+    report = build_report("doc.pdf", ALL_RULE_IDS, [], [region("r1", text="   ")])
+
+    assert report.regions_unevaluated == 1
+    assert report.status == "NEEDS_REVIEW"
+
+
+def test_regions_with_text_are_all_evaluable():
+    report = build_report("doc.pdf", ALL_RULE_IDS, [], [region("r1", text="CHN content")])
+
+    assert report.regions_unevaluated == 0
+    assert report.status == "PASS"
+
+
+def test_markdown_lists_regions_with_their_detection_method():
+    regions = [
+        region("r1", text="native highlighted text", source="native_annotation"),
+        region("r2", page=3, text="boxed text", source="hand_drawn"),
+    ]
+    markdown = render_markdown(build_report("doc.pdf", ALL_RULE_IDS, [], regions))
+
+    assert "## Flagged Regions" in markdown
+    assert "native annotation" in markdown
+    assert "hand-drawn box" in markdown
+    assert "Regions that could not be evaluated with confidence: 0" in markdown
+
+
+def test_markdown_flags_an_unreadable_region_in_the_table():
+    markdown = render_markdown(build_report("doc.pdf", ALL_RULE_IDS, [], [region("r1", text="")]))
+
+    assert "could not be evaluated" in markdown
+    assert "Regions that could not be evaluated with confidence: 1" in markdown
 
 
 def test_markdown_states_when_nothing_was_found():

@@ -48,10 +48,12 @@ def _render(report: ComplianceReport) -> None:
     show, message = STATUS_STYLE[report.status]
     show(message)
 
-    checked, violated, review = st.columns(3)
+    checked, violated, review, regions, unevaluated = st.columns(5)
     checked.metric("Rules checked", report.rules_checked)
     violated.metric("Rules violated", report.rules_violated)
     review.metric("Needs human review", report.needs_review_count)
+    regions.metric("Flagged regions", len(report.regions))
+    unevaluated.metric("Not evaluable", report.regions_unevaluated)
 
     violations = [
         f for f in report.findings
@@ -71,6 +73,23 @@ def _render(report: ComplianceReport) -> None:
 
     if not report.findings:
         st.success("No findings — document passed all checks.")
+
+    if report.regions:
+        st.subheader(f"Flagged regions ({len(report.regions)})")
+        st.caption("What the submitter marked for review, and how it was detected.")
+        st.dataframe(
+            [
+                {
+                    "Region": r.id,
+                    "Page": r.page,
+                    "Detected by": "native annotation" if r.source == "native_annotation" else "hand-drawn box",
+                    "Subtype": r.subtype,
+                    "Text": " ".join(r.text.split()) or "(no text — could not be evaluated)",
+                }
+                for r in report.regions
+            ],
+            use_container_width=True, hide_index=True,
+        )
 
     with st.expander("Raw report (JSON)"):
         st.json(to_dict(report))

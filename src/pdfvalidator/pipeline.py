@@ -29,7 +29,7 @@ def run_pipeline(pdf_path: str) -> ComplianceReport:
         findings += detect_qr_and_urls(doc, context.regions)
         rule_ids = [rule.id for rule in ALL_RULES] + ["QR-LINK"]
 
-        return build_report(Path(pdf_path).name, rule_ids, findings)
+        return build_report(Path(pdf_path).name, rule_ids, findings, context.regions)
     finally:
         doc.close()
 

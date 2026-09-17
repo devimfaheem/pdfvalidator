@@ -63,6 +63,63 @@ def test_handdrawn_captures_rectangles_and_skips_curves(tmp_path, ids):
     assert "CHN Clinical Standards" in regions[0].text
 
 
+def test_handdrawn_skips_solid_fills_with_no_outline(tmp_path, ids):
+    """A reviewer draws an outline; a solid block of brand colour is page furniture.
+    Sample-04's nav tab bar is five filled rectangles per page — 21 in total, each
+    containing real text and none of them flagged by anyone.
+    """
+    doc = pymupdf.open()
+    page = doc.new_page(width=600, height=300)
+    page.insert_text((20, 30), "Overview")
+    page.draw_rect(pymupdf.Rect(10, 10, 200, 50), fill=(0.29, 0.18, 0.32), color=None)  # filled tab, no stroke
+    page.insert_text((20, 130), "Flagged content here")
+    page.draw_rect(pymupdf.Rect(10, 110, 200, 150), color=(1, 0, 0))        # outlined box
+    path = tmp_path / "sample.pdf"
+    doc.save(path)
+    doc.close()
+
+    doc = pymupdf.open(path)
+    regions = extract_handdrawn_boxes(doc[0], page_number=1, existing_regions=[], id_counter=ids)
+    doc.close()
+
+    assert len(regions) == 1
+    assert "Flagged content" in regions[0].text
+
+
+def test_handdrawn_skips_rules_and_hairlines(tmp_path, ids):
+    """Sample-06's header rule is a stroked rectangle 532pt wide and 0pt tall. It
+    has no area, so it encloses nothing and is not a box."""
+    doc = pymupdf.open()
+    page = doc.new_page(width=600, height=300)
+    page.draw_line(pymupdf.Point(40, 46), pymupdf.Point(572, 46))
+    path = tmp_path / "sample.pdf"
+    doc.save(path)
+    doc.close()
+
+    doc = pymupdf.open(path)
+    regions = extract_handdrawn_boxes(doc[0], page_number=1, existing_regions=[], id_counter=ids)
+    doc.close()
+
+    assert regions == []
+
+
+def test_handdrawn_skips_the_border_of_a_reviewer_note(tmp_path, ids):
+    """A note's own border is a stroked rectangle. Its text is already excluded
+    from the text stream, so the box around it is not a flagged region either."""
+    doc = pymupdf.open()
+    page = doc.new_page(width=600, height=300)
+    page.add_freetext_annot(pymupdf.Rect(100, 100, 400, 160), "Note to CHN: see slide 3.")
+    path = tmp_path / "sample.pdf"
+    doc.save(path)
+    doc.close()
+
+    doc = pymupdf.open(path)
+    regions = extract_handdrawn_boxes(doc[0], page_number=1, existing_regions=[], id_counter=ids)
+    doc.close()
+
+    assert not any("Note to CHN" in r.text for r in regions)
+
+
 def test_handdrawn_skips_the_repaint_of_a_square_annotation(tmp_path, ids):
     doc = pymupdf.open()
     page = doc.new_page()
