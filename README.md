@@ -10,41 +10,122 @@ report as both JSON and Markdown.
 
 ---
 
-## Quick start
+## Running it with Docker
 
-### Docker (nothing to install)
-
-```bash
-docker compose run --rm pdfvalidator python -m pdfvalidator validate "CHN Generated Samples/CHN-Sample-01-Multi-Color-Highlights.pdf"
-```
-
-Reports land in `output/<document-name>/`. For the web UI:
+Nothing to install, and Docker supplies the native `zbar` library that pip cannot.
 
 ```bash
+# validate a sample — reports land in ./output/
+docker compose run --rm pdfvalidator \
+  python -m pdfvalidator validate "CHN Generated Samples/CHN-Sample-01-Multi-Color-Highlights.pdf"
+
+# or the web UI, then open http://localhost:8501
 docker compose up
 ```
 
-then open <http://localhost:8501> and upload a PDF.
+---
 
-### Local install
+## Running it locally
 
-QR decoding needs the native `zbar` library, which pip cannot install:
+### 1. Install the native QR library
+
+`pyzbar` is a binding to `zbar`, a C library. pip cannot install it, and without it
+the import fails outright.
 
 ```bash
-brew install zbar          # macOS
-sudo apt-get install libzbar0   # Debian/Ubuntu
+brew install zbar                 # macOS
+sudo apt-get install -y libzbar0  # Debian / Ubuntu
 ```
 
-Then:
+### 2. Create a virtual environment
+
+This needs **Python 3.11 or newer**. Check what you have before anything else:
 
 ```bash
+python3 --version
+```
+
+macOS ships 3.9, which is too old — `brew install python@3.12` and use `python3.12`
+below in place of `python3`.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate         # Windows: .venv\Scripts\activate
+```
+
+### 3. Install the project
+
+Upgrade pip first. Older pip cannot do an editable install from `pyproject.toml`
+and fails with *"File setup.py or setup.cfg not found"*.
+
+```bash
+pip install --upgrade pip
 pip install -e ".[web,dev]"
-python -m pdfvalidator validate "CHN Generated Samples/CHN-Sample-01-Multi-Color-Highlights.pdf"
-pytest
-streamlit run web/app.py    # optional UI
 ```
 
-The CLI exits `1` on `FAIL`, `0` otherwise, so it drops into a pipeline as a gate.
+`web` adds the Streamlit UI, `dev` adds pytest. Drop either if you don't need it.
+
+### 4. Validate a document
+
+```bash
+python -m pdfvalidator validate "CHN Generated Samples/CHN-Sample-01-Multi-Color-Highlights.pdf"
+```
+
+```
+Status: FAIL
+Report written to output/CHN-Sample-01-Multi-Color-Highlights/report.json
+                and output/CHN-Sample-01-Multi-Color-Highlights/report.md
+```
+
+Two files land in `output/<document-name>/`: `report.json` (the structured result)
+and `report.md` (the same thing for a human). Use `--output-dir` to write elsewhere.
+
+The CLI exits `1` on `FAIL` and `0` otherwise, so it drops into a pipeline as a gate.
+Note that `NEEDS_REVIEW` exits `0` — it is not a failure, it is a request for a person.
+
+Validate the whole sample packet at once:
+
+```bash
+for f in "CHN Generated Samples"/*.pdf; do python -m pdfvalidator validate "$f"; done
+```
+
+### 5. Run the web UI (optional)
+
+```bash
+streamlit run web/app.py
+```
+
+Opens on <http://localhost:8501>. Upload a PDF and the report renders as a status
+banner, counts, findings grouped by severity, and the table of flagged regions.
+
+### 6. Run the tests
+
+```bash
+pytest
+```
+
+70 tests, about a second. No network and no API key — everything is deterministic.
+
+### Troubleshooting
+
+**`ImportError: Unable to find zbar shared library`** — step 1 was skipped, or Python
+cannot see the library. On an Apple-silicon Mac with a Homebrew install, point the
+loader at it:
+
+```bash
+DYLD_LIBRARY_PATH=/opt/homebrew/lib python -m pdfvalidator validate <pdf>
+```
+
+This happens under Anaconda, whose Python does not search Homebrew's library path.
+A virtual environment created from a Homebrew Python finds `zbar` without the
+override — verified on 3.13.
+
+**`pytest` fails collecting with an unrelated plugin error** — a globally installed
+pytest plugin is breaking collection. Run the suite without third-party plugins:
+
+```bash
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest
+```
 
 ---
 
@@ -71,10 +152,14 @@ PDF ─┬─ extract.py ── flagged regions  ─┬─ rules.py    ── fi
      └─ logo.py ───── reference hash ───┘                           ┘               report.md
 ```
 
-Requirement-by-requirement traceability — every rule and task mapped to its
-implementation and test — is in [docs/SPEC.md](docs/SPEC.md).
+Two companion documents:
 
-Eight modules, ~900 lines:
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — how the pieces fit, the data
+  model, how to add a rule, and what the PDF format forced on the design.
+- **[docs/SPEC.md](docs/SPEC.md)** — every requirement mapped to its implementation
+  and its test.
+
+Eight modules, about 970 lines:
 
 | File | Responsibility |
 |---|---|
@@ -196,7 +281,7 @@ failure mode for reused boilerplate — not a parsing artifact.
 pytest
 ```
 
-62 tests. Rule logic is tested against constructed text spans with no PDF I/O; extraction,
+70 tests. Rule logic is tested against constructed text spans with no PDF I/O; extraction,
 links and logo matching against PDFs built on the fly; and `test_samples.py` runs the full
 pipeline over the real packet with expectations derived from reading the files.
 

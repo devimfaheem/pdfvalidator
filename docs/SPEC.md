@@ -84,7 +84,7 @@ document-level as the brief requires; the other two are anchored to a page.
 | Count of regions that could not be evaluated with confidence | `regions_unevaluated` — flagged regions yielding no text; also forces NEEDS_REVIEW | `test_report.py::test_region_without_text_counts_as_not_evaluable` | Done |
 | Per-rule findings with page and snippet, so the source PDF need not be reopened | `Finding(page, snippet, explanation)`, rendered in both formats | `test_report.py::test_markdown_includes_status_counts_and_sections` | Done |
 | Clear separation of confident violations from items for human judgment | Three headed sections: Violations / Needs Human Review / Checked and Compliant | `test_report.py::test_markdown_separates_a_compliant_logo_from_violations` | Done |
-| Justify the output format | JSON as source of truth, Markdown rendered from it. Reasoning in docs/DESIGN.md | — | Done |
+| Justify the output format | JSON as source of truth, Markdown rendered from it. Reasoning in docs/ARCHITECTURE.md | — | Done |
 
 ---
 
