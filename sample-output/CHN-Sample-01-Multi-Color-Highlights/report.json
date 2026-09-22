@@ -1,0 +1,142 @@
+{
+  "document": "CHN-Sample-01-Multi-Color-Highlights.pdf",
+  "status": "FAIL",
+  "rules_checked": 6,
+  "rules_violated": 1,
+  "needs_review_count": 1,
+  "regions_unevaluated": 0,
+  "regions": [
+    {
+      "id": "region-0",
+      "page": 1,
+      "bbox": [
+        40.0,
+        366.0,
+        570.0,
+        387.0
+      ],
+      "text": "*ExampleDrug + Agent-Y is preferred in patients with both systemic and CNS progression.\n\u00b9Tier A: Based upon high-quality evidence, there is uniform CHN panel consensus (\u226585% support) that the approach is appropriate.\nCHN makes no warranties of any kind regarding this content, its use, or application, and disclaims any responsibility for its application or use in any way.",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    },
+    {
+      "id": "region-1",
+      "page": 1,
+      "bbox": [
+        40.0,
+        402.0,
+        570.0,
+        430.0
+      ],
+      "text": "References:\n1. Referenced with permission from the Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122) for Breast Cancer V.1.2026. \u00a9 Contoso Health Network,\nInc. 2026. All rights reserved. To view the most recent version, go online to contosohealth.org.\n2. Referenced with permission from the Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122) for Central Nervous System Cancers V.3.2025. \u00a9",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    },
+    {
+      "id": "region-2",
+      "page": 1,
+      "bbox": [
+        40.0,
+        423.0,
+        570.0,
+        451.0
+      ],
+      "text": "2. Referenced with permission from the Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122) for Central Nervous System Cancers V.3.2025. \u00a9\nContoso Health Network, Inc. 2025. All rights reserved. Accessed February 12, 2026. To view the most recent version, go online to contosohealth.org.",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    },
+    {
+      "id": "region-3",
+      "page": 1,
+      "bbox": [
+        40.0,
+        384.0,
+        570.0,
+        395.0
+      ],
+      "text": "CHN makes no warranties of any kind regarding this content, its use, or application, and disclaims any responsibility for its application or use in any way.\nReferences:",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    },
+    {
+      "id": "region-4",
+      "page": 1,
+      "bbox": [
+        36.0,
+        139.0,
+        544.0,
+        252.0
+      ],
+      "text": "CHN\nTIER A\nContoso Health Network Clinical Practice Standards (CHN Clinical\nStandards\u2122) for Breast Cancer\u00b9*\nExampleDrug (BrandX\u00ae) in combination with Agent-Y is recommended by CHN as a Tier A, preferred systemic\ntreatment option in 2L or 3L HER2+ disease.",
+      "source": "hand_drawn",
+      "subtype": "Square",
+      "merged_from": [
+        "region-6"
+      ]
+    },
+    {
+      "id": "region-5",
+      "page": 1,
+      "bbox": [
+        36.0,
+        254.0,
+        544.0,
+        352.0
+      ],
+      "text": "CHN\nTIER A\nCHN Clinical Standards\u2122 for Central Nervous System Cancers\u00b2*\nExampleDrug (BrandX\u00ae) is the only CHN Tier A, preferred systemic treatment option for brain metastases in 2L+\ndisease.",
+      "source": "hand_drawn",
+      "subtype": "Square",
+      "merged_from": [
+        "region-7"
+      ]
+    },
+    {
+      "id": "region-8",
+      "page": 2,
+      "bbox": [
+        40.0,
+        138.0,
+        420.0,
+        255.0
+      ],
+      "text": "Scan the code below for the full CHN Clinical Standards excerpt referenced on this page:\ncontosohealth.org/prescribing-info/examplebrandx",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "CITATION",
+      "confidence": "confirmed",
+      "page": 1,
+      "bbox": [
+        40.0,
+        393.83099365234375,
+        564.3622436523438,
+        421.0032958984375
+      ],
+      "snippet": "References:\n1. Referenced with permission from the Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122) for Breast Cancer V.1.2026. \u00a9 Contoso Health Network,\nInc. 2026. All rights reserved. To view the most recent version, go online to contosohealth.org.\n",
+      "explanation": "Citation block is missing required element(s): access date.",
+      "region_id": null
+    },
+    {
+      "rule_id": "QR-LINK",
+      "confidence": "needs_review",
+      "page": 2,
+      "bbox": [
+        40.0,
+        138.0,
+        420.0,
+        255.0
+      ],
+      "snippet": "https://contosohealth.org/prescribing-info/examplebrandx",
+      "explanation": "QR code detected in flagged region, decodes to: https://contosohealth.org/prescribing-info/examplebrandx",
+      "region_id": "region-8"
+    }
+  ]
+}

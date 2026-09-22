@@ -1,0 +1,68 @@
+{
+  "document": "CHN-Sample-04-Hand-Drawn-Boxes.pdf",
+  "status": "FAIL",
+  "rules_checked": 6,
+  "rules_violated": 1,
+  "needs_review_count": 1,
+  "regions_unevaluated": 0,
+  "regions": [
+    {
+      "id": "region-0",
+      "page": 3,
+      "bbox": [
+        85.0,
+        145.0,
+        875.0,
+        265.0
+      ],
+      "text": "Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122)\nfor Central Nervous System Cancers\nTumorScan+ is recommended as a Tier A systemic option for patients with a high-risk profile not amenable to complete\nresection\u00b2",
+      "source": "hand_drawn",
+      "subtype": "Square",
+      "merged_from": []
+    },
+    {
+      "id": "region-1",
+      "page": 3,
+      "bbox": [
+        54.0,
+        458.0,
+        906.0,
+        505.0
+      ],
+      "text": "1. TumorScan+ Prescribing Information. Meridian Diagnostics. 2. Referenced with permission from the Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122) for Central Nervous System Cancers V.3.2025.\n\u00a9 Contoso Health Network, Inc. 2025. All rights reserved. Accessed February 3, 2026. To view the most recent version, go online to contosohealth.org. CHN makes no warranties of any kind regarding this content, its use, or\napplication, and disclaims any responsibility for its application or use in any way.",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "CAT-DEF",
+      "confidence": "confirmed",
+      "page": 3,
+      "bbox": [
+        120.0,
+        203.10000610351562,
+        830.2625122070312,
+        249.83749389648438
+      ],
+      "snippet": "for Central Nervous System Cancers\nTumorScan+ is recommended as a Tier A systemic option for patients with a high-risk profile not amenable to complete\nresection\u00b2\n",
+      "explanation": "Tier A rating stated but the required exact definition text is missing or paraphrased nearby.",
+      "region_id": null
+    },
+    {
+      "rule_id": "QR-LINK",
+      "confidence": "needs_review",
+      "page": 3,
+      "bbox": [
+        541.8821411132812,
+        472.0775146484375,
+        607.85888671875,
+        483.481689453125
+      ],
+      "snippet": "https://contosohealth.org",
+      "explanation": "Hyperlink annotation found near flagged region: https://contosohealth.org",
+      "region_id": "region-1"
+    }
+  ]
+}

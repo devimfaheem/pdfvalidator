@@ -1,0 +1,110 @@
+{
+  "document": "CHN-Sample-03-Multi-Page-Deck.pdf",
+  "status": "FAIL",
+  "rules_checked": 6,
+  "rules_violated": 2,
+  "needs_review_count": 1,
+  "regions_unevaluated": 0,
+  "regions": [
+    {
+      "id": "region-0",
+      "page": 2,
+      "bbox": [
+        128.0,
+        151.0,
+        753.0549926757812,
+        170.0
+      ],
+      "text": "\u2022  Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122)",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    },
+    {
+      "id": "region-1",
+      "page": 3,
+      "bbox": [
+        9.0,
+        9.0,
+        951.0,
+        531.0
+      ],
+      "text": "CHN Clinical Standards \u2014 General Testing Criteria\n\u2022  Regardless of cancer type in personal/family history:\n     \u2022  Individuals with a known pathogenic variant related to a hereditary cancer syndrome\n     \u2022  Individuals with previous limited genetic testing\n\u2022  To aid in systemic therapy and surgical decision-making\nAbove recommendations were adapted from the Contoso Health Network Genetic/Familial High-Risk Assessment guidance, version 2.2026.",
+      "source": "hand_drawn",
+      "subtype": "Square",
+      "merged_from": []
+    },
+    {
+      "id": "region-2",
+      "page": 3,
+      "bbox": [
+        68.0,
+        55.0,
+        723.6740112304688,
+        81.0
+      ],
+      "text": "CHN Clinical Standards \u2014 General Testing Criteria",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    },
+    {
+      "id": "region-3",
+      "page": 4,
+      "bbox": [
+        68.0,
+        100.0,
+        900.0,
+        202.0
+      ],
+      "text": "1. Referenced with permission from the Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122) for Genetic/Familial High-Risk\nAssessment V.2.2026. \u00a9 Contoso Health Network, Inc. 2026. All rights reserved. Accessed March 3, 2026. To view the most recent version, go online to\ncontosohealth.org.\nCHN makes no warranties of any kind regarding this content, its use, or application, and disclaims any responsibility for its application or use in any way.",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "CHN-2",
+      "confidence": "confirmed",
+      "page": 3,
+      "bbox": [
+        70.0,
+        46.11000061035156,
+        719.674072265625,
+        83.28900146484375
+      ],
+      "snippet": "CHN Clinical Standards",
+      "explanation": "Bare 'CHN Clinical Standards' used at occurrence #2; the 2nd occurrence must use the required trademark form",
+      "region_id": null
+    },
+    {
+      "rule_id": "CHN-1",
+      "confidence": "confirmed",
+      "page": 4,
+      "bbox": [
+        70.0,
+        168.10000610351562,
+        877.647705078125,
+        184.58799743652344
+      ],
+      "snippet": "CHN",
+      "explanation": "Bare 'CHN' used before the required first-mention form 'Contoso Health Network\u00ae (CHN\u00ae)' appeared anywhere earlier in the document",
+      "region_id": null
+    },
+    {
+      "rule_id": "QR-LINK",
+      "confidence": "needs_review",
+      "page": 4,
+      "bbox": [
+        70.0,
+        216.0,
+        261.4119873046875,
+        232.0
+      ],
+      "snippet": "https://contosohealth.org/clinical-standards",
+      "explanation": "Hyperlink annotation found near flagged region: https://contosohealth.org/clinical-standards",
+      "region_id": "region-3"
+    }
+  ]
+}

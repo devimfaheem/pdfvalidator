@@ -106,6 +106,15 @@ pytest
 
 70 tests, about a second. No network and no API key — everything is deterministic.
 
+### Configuration
+
+There is none, and there is no `.env` file to copy. The validator reads no
+environment variables, needs no API key, and makes no network calls — every check is
+deterministic and local. The only inputs are the PDF path and `--output-dir`.
+
+The two things that *are* environment-dependent are covered above: the native `zbar`
+library (step 1) and Python 3.11+ (step 2).
+
 ### Troubleshooting
 
 **`ImportError: Unable to find zbar shared library`** — step 1 was skipped, or Python
@@ -152,8 +161,10 @@ PDF ─┬─ extract.py ── flagged regions  ─┬─ rules.py    ── fi
      └─ logo.py ───── reference hash ───┘                           ┘               report.md
 ```
 
-Two companion documents:
+Companion reading:
 
+- **[sample-output/](sample-output/)** — the reports this produces for all six
+  provided samples, committed so you can read them without running anything.
 - **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — how the pieces fit, the data
   model, how to add a rule, and what the PDF format forced on the design.
 - **[docs/SPEC.md](docs/SPEC.md)** — every requirement mapped to its implementation

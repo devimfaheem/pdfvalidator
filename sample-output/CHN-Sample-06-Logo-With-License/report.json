@@ -1,0 +1,77 @@
+{
+  "document": "CHN-Sample-06-Logo-With-License.pdf",
+  "status": "FAIL",
+  "rules_checked": 6,
+  "rules_violated": 2,
+  "needs_review_count": 0,
+  "regions_unevaluated": 0,
+  "regions": [
+    {
+      "id": "region-0",
+      "page": 1,
+      "bbox": [
+        40.0,
+        90.0,
+        380.0,
+        220.0
+      ],
+      "text": "Contoso Health\nNetwork\nCHN Logo",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    },
+    {
+      "id": "region-1",
+      "page": 1,
+      "bbox": [
+        40.0,
+        232.0,
+        360.0,
+        248.0
+      ],
+      "text": "Logo used with permission per agreement CHN-2026-014.",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "CHN-1",
+      "confidence": "confirmed",
+      "page": 1,
+      "bbox": [
+        165.0,
+        159.39999389648438,
+        202.343994140625,
+        170.39199829101562
+      ],
+      "snippet": "CHN",
+      "explanation": "Bare 'CHN' used before the required first-mention form 'Contoso Health Network\u00ae (CHN\u00ae)' appeared anywhere earlier in the document",
+      "region_id": null
+    },
+    {
+      "rule_id": "DISCLAIMER",
+      "confidence": "confirmed",
+      "page": 1,
+      "bbox": null,
+      "snippet": "",
+      "explanation": "Mandatory CHN disclaimer statement was not found anywhere in the document.",
+      "region_id": null
+    },
+    {
+      "rule_id": "LOGO-LICENSE",
+      "confidence": "confirmed",
+      "page": 1,
+      "bbox": [
+        40.0,
+        90.0,
+        380.0,
+        220.0
+      ],
+      "snippet": "Contoso Health\nNetwork\nCHN Logo",
+      "explanation": "Logo detected (hash distance 0); license reference found nearby \u2014 provisionally compliant.",
+      "region_id": "region-0"
+    }
+  ]
+}

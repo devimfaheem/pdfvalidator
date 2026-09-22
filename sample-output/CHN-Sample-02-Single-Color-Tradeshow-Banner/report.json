@@ -1,0 +1,96 @@
+{
+  "document": "CHN-Sample-02-Single-Color-Tradeshow-Banner.pdf",
+  "status": "FAIL",
+  "rules_checked": 6,
+  "rules_violated": 2,
+  "needs_review_count": 0,
+  "regions_unevaluated": 0,
+  "regions": [
+    {
+      "id": "region-0",
+      "page": 2,
+      "bbox": [
+        18.0,
+        899.0,
+        382.0,
+        962.0
+      ],
+      "text": "*The Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122) for Breast Cancer, version\n1.2026. \u00a9 Contoso Health Network, Inc. 2026. All rights reserved. Accessed January 20, 2026. To view the most\nrecent version, go online to contosohealth.org.\nCHN makes no warranties of any kind regarding this content, its use, or application, and disclaims any responsibility\nfor its application or use in any way.",
+      "source": "native_annotation",
+      "subtype": "Highlight",
+      "merged_from": []
+    },
+    {
+      "id": "region-1",
+      "page": 2,
+      "bbox": [
+        35.0,
+        676.0,
+        365.0,
+        746.0
+      ],
+      "text": "CHN CLINICAL STANDARDS\nRECOMMENDS",
+      "source": "hand_drawn",
+      "subtype": "Square",
+      "merged_from": []
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "CHN-1",
+      "confidence": "confirmed",
+      "page": 1,
+      "bbox": [
+        90.0,
+        108.17500305175781,
+        566.3111572265625,
+        153.28900146484375
+      ],
+      "snippet": "CHN",
+      "explanation": "Bare 'CHN' used before the required first-mention form 'Contoso Health Network\u00ae (CHN\u00ae)' appeared anywhere earlier in the document",
+      "region_id": null
+    },
+    {
+      "rule_id": "CHN-2",
+      "confidence": "confirmed",
+      "page": 2,
+      "bbox": [
+        97.51249694824219,
+        690.9500122070312,
+        302.4874572753906,
+        711.60498046875
+      ],
+      "snippet": "CHN CLINICAL STANDARDS",
+      "explanation": "Bare 'CHN Clinical Standards' used at occurrence #1; the 1st occurrence must use the required trademark form",
+      "region_id": null
+    },
+    {
+      "rule_id": "CHN-2",
+      "confidence": "confirmed",
+      "page": 2,
+      "bbox": [
+        24.0,
+        907.6900024414062,
+        372.0649108886719,
+        953.033203125
+      ],
+      "snippet": "Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122)",
+      "explanation": "'Contoso Health Network Clinical Practice Standards (CHN Clinical Standards\u2122)' form used at occurrence #2; it must only appear as the 1st occurrence",
+      "region_id": null
+    },
+    {
+      "rule_id": "CHN-1",
+      "confidence": "confirmed",
+      "page": 2,
+      "bbox": [
+        24.0,
+        907.6900024414062,
+        372.0649108886719,
+        953.033203125
+      ],
+      "snippet": "CHN",
+      "explanation": "Bare 'CHN' used before the required first-mention form 'Contoso Health Network\u00ae (CHN\u00ae)' appeared anywhere earlier in the document",
+      "region_id": null
+    }
+  ]
+}
