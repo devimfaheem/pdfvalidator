@@ -9,7 +9,7 @@ from pathlib import Path
 import streamlit as st
 
 from pdfvalidator.models import ComplianceReport, Finding
-from pdfvalidator.pipeline import run_pipeline
+from pdfvalidator.pipeline import UnreadablePDF, run_pipeline
 from pdfvalidator.report import to_dict
 
 COMPLIANCE_ONLY_RULES = {"LOGO-LICENSE"}
@@ -31,8 +31,15 @@ def main() -> None:
         st.info("Upload a PDF to validate. Sample files are in `CHN Generated Samples/`.")
         return
 
-    with st.spinner(f"Validating {uploaded.name}…"):
-        report = _validate(uploaded.getvalue(), uploaded.name)
+    # A corrupt or locked upload otherwise surfaces as a Streamlit traceback, which
+    # exposes internal paths and tells a reviewer nothing they can act on.
+    try:
+        with st.spinner(f"Validating {uploaded.name}…"):
+            report = _validate(uploaded.getvalue(), uploaded.name)
+    except UnreadablePDF as exc:
+        st.error(str(exc))
+        st.caption("Nothing was validated. Upload a readable, unlocked PDF to try again.")
+        return
 
     _render(report)
 

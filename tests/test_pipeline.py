@@ -36,9 +36,24 @@ def test_cli_writes_both_reports(tmp_path):
     assert (output_dir / "doc" / "report.md").exists()
 
 
+def test_cli_rejects_a_password_protected_pdf(tmp_path, capsys):
+    """An encrypted PDF opens without complaint and only fails when a page is read,
+    so it reached the pipeline and raised a bare ValueError at the user."""
+    import pymupdf
+
+    doc = pymupdf.open()
+    doc.new_page().insert_text((72, 100), "CHN content")
+    locked = tmp_path / "locked.pdf"
+    doc.save(locked, encryption=pymupdf.PDF_ENCRYPT_AES_256, user_pw="hunter2")
+    doc.close()
+
+    assert main(["validate", str(locked)]) == 1
+    assert "password-protected" in capsys.readouterr().err
+
+
 def test_cli_rejects_a_file_that_is_not_a_pdf(tmp_path, capsys):
     bad_path = tmp_path / "not_a_pdf.pdf"
     bad_path.write_text("this is not a pdf")
 
     assert main(["validate", str(bad_path)]) == 1
-    assert "could not open" in capsys.readouterr().err
+    assert "could not open" in capsys.readouterr().err.lower()

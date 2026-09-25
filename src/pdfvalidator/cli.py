@@ -3,9 +3,7 @@
 import argparse
 import sys
 
-import pymupdf
-
-from .pipeline import run_pipeline
+from .pipeline import UnreadablePDF, run_pipeline
 from .report import write_report
 
 
@@ -20,12 +18,11 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        pymupdf.open(args.pdf_path).close()
-    except Exception as exc:
-        print(f"Error: could not open '{args.pdf_path}' as a PDF: {exc}", file=sys.stderr)
+        report = run_pipeline(args.pdf_path)
+    except UnreadablePDF as exc:
+        print(f"Error: {exc}", file=sys.stderr)
         return 1
 
-    report = run_pipeline(args.pdf_path)
     json_path, markdown_path = write_report(report, args.output_dir)
 
     print(f"Status: {report.status}")
