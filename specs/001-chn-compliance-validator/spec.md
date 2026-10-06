@@ -1,15 +1,21 @@
-# Requirements
+# Feature Specification: CHN PDF Compliance Validator
 
-Source of truth for what the CHN PDF compliance validator must do. Acceptance
-criteria are written in EARS form (`WHEN <trigger> THEN the system SHALL
-<response>`) so each one is directly testable.
+**Feature Branch**: `001-chn-compliance-validator`
+**Created**: 2026-10-06
+**Status**: Implemented
+**Input**: Contoso Health Network content-compliance brief (6 tasks, 8 content rules)
+
+Source of truth for what the validator must do. Acceptance criteria are written in
+EARS form (`WHEN <trigger> THEN the system SHALL <response>`) so each one is directly
+testable.
 
 **Status of this document.** The system was built first and these requirements were
 derived from the brief and from behaviour verified against the provided sample
-packet. They are the source of truth from here on: a change to behaviour starts
-with a change here.
+packet. They are the source of truth from here on: a change to behaviour starts with
+a change here.
 
-Traceability to code and tests is in [tasks.md](tasks.md).
+Governed by [the project constitution](../../.specify/memory/constitution.md).
+Design in [plan.md](plan.md); traceability to code and tests in [tasks.md](tasks.md).
 
 ---
 
@@ -192,4 +198,4 @@ act on it without reopening the source PDF.
 mention from a citation reproducing older text. That judgment has an exact answer
 because CHN citations open with a fixed phrase, so it is settled in code. The
 trade-off and the single call site where a model would re-enter are recorded in
-[design.md](design.md).
+[plan.md](plan.md).

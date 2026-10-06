@@ -165,13 +165,19 @@ Companion reading:
 
 - **[sample-output/](sample-output/)** — the reports this produces for all six
   provided samples, committed so you can read them without running anything.
-- **[specs/requirements.md](specs/requirements.md)** — what the system must do, as
-  numbered requirements with testable acceptance criteria. The source of truth: a
+Specifications follow [GitHub Spec Kit](https://github.com/github/spec-kit)
+conventions, so new work goes through `/speckit-specify` → `/speckit-plan` →
+`/speckit-tasks` rather than hand-written documents.
+
+- **[Constitution](.specify/memory/constitution.md)** — the five principles that
+  govern every change. A pull request that breaks one needs an amendment first.
+- **[spec.md](specs/001-chn-compliance-validator/spec.md)** — what the system must
+  do, as numbered requirements with EARS acceptance criteria. The source of truth: a
   behaviour change starts here.
-- **[specs/design.md](specs/design.md)** — how it is built to meet them, with each
-  component traced to the requirements it satisfies.
-- **[specs/tasks.md](specs/tasks.md)** — the implementation plan, what is done, and
-  what is still open with acceptance criteria for each.
+- **[plan.md](specs/001-chn-compliance-validator/plan.md)** — how it is built to meet
+  them, with each component traced to the requirements it satisfies.
+- **[tasks.md](specs/001-chn-compliance-validator/tasks.md)** — what is done, traced
+  to code and tests, and what is still open with acceptance criteria for each.
 
 Eight modules, about 970 lines:
 

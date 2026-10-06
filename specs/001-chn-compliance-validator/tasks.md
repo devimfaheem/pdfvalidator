@@ -1,6 +1,9 @@
-# Tasks
+# Tasks: CHN PDF Compliance Validator
 
-Implementation plan traced to [requirements.md](requirements.md). Every task names
+**Input**: Design documents from `/specs/001-chn-compliance-validator/`
+**Prerequisites**: [spec.md](spec.md), [plan.md](plan.md)
+
+Implementation plan traced to [spec.md](spec.md). Every task names
 the requirements it satisfies, the code that implements it, and the tests that hold
 it in place.
 

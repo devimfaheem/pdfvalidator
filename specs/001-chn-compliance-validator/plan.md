@@ -1,7 +1,35 @@
-# Design
+# Implementation Plan: CHN PDF Compliance Validator
 
-How the system meets [requirements.md](requirements.md). Every component names the
-requirements it satisfies.
+**Branch**: `001-chn-compliance-validator` | **Date**: 2026-10-06 | **Spec**: [spec.md](spec.md)
+
+## Summary
+
+A deterministic pre-screener for submitted PDFs. One extraction pass yields flagged
+regions and ordered text; eight rules evaluate them; one report object renders as
+JSON, Markdown and a web view. No language model and no network at validation time.
+
+## Technical Context
+
+**Language/Version**: Python 3.11+
+**Primary Dependencies**: PyMuPDF, pyzbar, imagehash, Pillow — all input-side; rule logic is standard library
+**Storage**: Filesystem — `report.json` and `report.md` per document
+**Testing**: pytest (71 tests), ruff
+**Target Platform**: Local CLI, Streamlit UI, Docker image
+**Project Type**: Single project — library with CLI and web front doors
+**Constraints**: Deterministic output, no network, no API key, rules testable without PDF I/O
+**Scale/Scope**: ~970 lines of source, 8 rules, 6 reference samples
+
+## Constitution Check
+
+| Principle | How this design satisfies it |
+|---|---|
+| I. Deterministic by default | No model, no network, no env vars; determinism proven by regenerating sample output and diffing |
+| II. Rules are pure functions of plain data | `Rule.check()` takes `DocumentContext` of text spans and regions; only `LogoLicenseRule` needs the document handle |
+| III. Confidence is explicit | `Finding.confidence` is `confirmed` or `needs_review`, no default |
+| IV. Unreadable ≠ non-compliant | `UnreadablePDF` yields no report; unevaluable regions force `NEEDS_REVIEW` |
+| V. Verify against the artifact | Sample expectations derived by reading each PDF, never recorded from output |
+
+No violations. No complexity deviations to justify.
 
 ---
 
